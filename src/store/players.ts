@@ -27,7 +27,7 @@ export const usePlayersStore = create<PlayersStore>()(
           ...state.players,
           {
             ...player,
-            id: Date.now().toString(),
+            id: player.name,
             createdAt: new Date().toISOString()
           }
         ]

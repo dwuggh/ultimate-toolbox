@@ -23,6 +23,7 @@ export default function TacticBoard() {
     removeChess,
     removeFrisbee,
     setStrokes,
+	setBrush,
     setSaveName,
     importBoard
   } = useTacticBoardStore()
@@ -121,7 +122,7 @@ export default function TacticBoard() {
 							<input 
 								type="file" 
 								accept=".json" 
-								onChange={importBoard}
+								onChange={handleImport}
 								className="hidden"
 								disabled={isImporting}
 							/>

@@ -92,13 +92,14 @@ export default function VideoRecap() {
     }
   };
 
-  const addAnnotation = () => {
+  const addAnnotation = (tags: string[]) => {
     if (!annotationText.trim() || !selectedVideo) return;
 
     const newAnnotation: Annotation = {
       id: Date.now().toString(),
       time: currentTime,
       text: annotationText,
+      tags,
       videoUrl: selectedVideo,
       createdAt: new Date().toISOString()
     };

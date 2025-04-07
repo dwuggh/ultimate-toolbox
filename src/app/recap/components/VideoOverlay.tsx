@@ -13,6 +13,7 @@ export interface Annotation {
   id: string;
   time: number;
   text: string;
+  tags: string[];
   videoUrl: string;
   createdAt: string;
   drawing?: Array<StrokeData>; // normalized points
@@ -68,25 +69,26 @@ export function VideoOverlay({
 
   useImperativeHandle(ref, () => ({
     saveAnnotation: () => {
-      console.log("save annotation", lines);
+      console.log("save annotation", strokeHook.lines);
       const annotation = {
         time: currentTime,
         text: '',
         x: 0,
         y: 0,
         videoUrl: '',
-        drawing: [...lines]
+        tags: [],
+        drawing: [...strokeHook.lines]
       }
         const text = 'stroke';
         onAddAnnotation({
           ...annotation,
-          text
+          text,
         });
       strokeHook.clear();
     },
     cancelAnnotation: () => {
       
-      clearStroke();
+      strokeHook.clear();
     }
   }))
 
@@ -132,6 +134,7 @@ export function VideoOverlay({
           {strokeHook.currentLine && (
             <pixiGraphics
               draw={g => {
+                if (!strokeHook.currentLine) return;
                 drawStroke(g, strokeHook.currentLine);
               }}
             />

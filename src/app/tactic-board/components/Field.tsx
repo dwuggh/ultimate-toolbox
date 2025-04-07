@@ -15,7 +15,7 @@ import { MyContainer } from '@/lib/container';
 extend({ Container, Graphics, Text, Sprite, MyContainer });
 
 interface FieldProps {
-  players: ChessMap,
+  chesses: ChessMap,
   frisbees: FrisbeeData[],
   brush: Brush,
   strokeHook: StrokeHookResult,
@@ -23,7 +23,7 @@ interface FieldProps {
 }
 
 
-const Field = ({players, frisbees, brush, strokeHook, selectState }: FieldProps) => {
+const Field = ({chesses, frisbees, brush, strokeHook, selectState }: FieldProps) => {
   useApp(true);
   const courtRef = useRef<Container>(null);
 
@@ -105,7 +105,7 @@ const Field = ({players, frisbees, brush, strokeHook, selectState }: FieldProps)
       <pixiGraphics draw={draw} position={{ x: 10, y: 10 }}>
       </pixiGraphics>
       {
-        [...players.values()].flat().map((player) => {
+        [...chesses.values()].flat().map((player) => {
           return <Player key={player.id} id={player.id} color={player.color} initialPosition={player.initialPosition} radius={2} />
         })
       }
