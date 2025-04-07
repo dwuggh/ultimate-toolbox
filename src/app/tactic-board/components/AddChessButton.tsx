@@ -1,15 +1,14 @@
+'use client';
 import { useCallback, useState } from "react";
 import { ChessColor, ChessData } from "./Player";
 import { Point } from "pixi.js";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { LuPlus } from "react-icons/lu";
+import { useTacticBoardStore } from '@/store/tactic-board';
 
-interface Props {
-  addChess: (newPlayer: ChessData) => void
-}
-
-export default function AddChessButton({addChess}: Props) {
+export default function AddChessButton() {
+  const addChess = useTacticBoardStore(state => state.addChess);
   const [color, setColor] = useState<ChessColor>(ChessColor.RED);
 
   const onClick = useCallback(() => {

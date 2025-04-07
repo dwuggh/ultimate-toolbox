@@ -34,21 +34,6 @@ export default function TacticBoard() {
     const strokeHook = useStroke(brush);
   	const selectState = useRef<SelectState>(new SelectState());
 	
-	const addChess = (newChess: ChessData) => {
-		setChesses(prev => {
-			const color = newChess.color;
-			const players = prev.get(color) || [];
-			newChess.id = players.map(p => p.id).reduce((a, b) => Math.max(a, b), 0) + 1;
-			const newPlayers = new Map(prev);
-			newPlayers.set(color, [...players, newChess]);
-			return newPlayers;
-		});
-	}
-	
-
-	const addFrisbee = (newFrisbee: FrisbeeData) => {
-		setFrisbees(prev => [...prev, newFrisbee]);
-	}
 
 	const exportBoard = () => {
 		const data = {
@@ -161,8 +146,8 @@ export default function TacticBoard() {
 				<Field players={chesses} frisbees={frisbees} brush={brush} strokeHook={strokeHook} selectState={selectState}></Field>
 			</Application>
     		<div className="flex justify-between w-180 items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg p-1.5 shadow-sm">
-			<AddChessButton addChess={addChess} />
-			<FrisbeeButton addFrisbee={addFrisbee} />
+			<AddChessButton />
+			<FrisbeeButton />
 			{/* <Toggle variant='outline' onPressedChange={(pressed: boolean) => drawModeRef.current = pressed ? 1 : 0}><Pen /></Toggle> */}
 			<BrushSelector brush={brush} onBrushChange={setBrush}/>
 			<DeleteButton onDeletion={onDeletion}/>
