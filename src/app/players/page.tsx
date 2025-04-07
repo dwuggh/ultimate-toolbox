@@ -1,22 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { saveAs } from 'file-saver';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-
-type Player = {
-  id: string;
-  name: string;
-  jerseyNumber: number;
-  gender: 'male' | 'female' | 'other';
-  position?: string;
-  createdAt: string;
-};
+import { Player, usePlayersStore } from '@/store/players';
 
 export default function PlayersPage() {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const { players, addPlayer, removePlayer, setPlayers } = usePlayersStore();
   const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id' | 'createdAt'>>({
     name: '',
     jerseyNumber: 0,
@@ -24,43 +16,15 @@ export default function PlayersPage() {
     position: ''
   });
 
-  // Load players from localStorage on mount
-  useEffect(() => {
-    const savedPlayers = localStorage.getItem('players');
-    if (savedPlayers) {
-      try {
-        setPlayers(JSON.parse(savedPlayers));
-      } catch (error) {
-        console.error('Failed to parse players from localStorage', error);
-      }
-    }
-  }, []);
-
-  const savePlayers = (updatedPlayers: Player[]) => {
-    setPlayers(updatedPlayers);
-    localStorage.setItem('players', JSON.stringify(updatedPlayers));
-  };
-
-  const addPlayer = () => {
+  const handleAddPlayer = () => {
     if (!newPlayer.name.trim()) return;
-
-    const player: Player = {
-      ...newPlayer,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString()
-    };
-
-    savePlayers([...players, player]);
-    setNewPlayer({
+    addPlayer(newPlayer);
+    setNewPlayer({ 
       name: '',
       jerseyNumber: 0,
       gender: 'male',
       position: ''
     });
-  };
-
-  const removePlayer = (id: string) => {
-    savePlayers(players.filter(p => p.id !== id));
   };
 
   const exportPlayers = () => {
@@ -78,7 +42,7 @@ export default function PlayersPage() {
       try {
         const imported = JSON.parse(e.target?.result as string);
         if (Array.isArray(imported)) {
-          savePlayers(imported);
+          setPlayers(imported);
         }
       } catch (error) {
         console.error('Error parsing players file:', error);
@@ -174,7 +138,7 @@ export default function PlayersPage() {
           <CardFooter>
             <Button 
               className="w-full sm:w-auto" 
-              onClick={addPlayer}
+              onClick={handleAddPlayer}
               disabled={!newPlayer.name.trim()}
             >
               Add Player

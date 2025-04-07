@@ -16,6 +16,11 @@ export default function HeaderNavigationMenu() {
 			  <NavigationMenuLink className={navigationMenuTriggerStyle()}>recap</NavigationMenuLink>
 			  </Link>
 			</NavigationMenuItem>
+			<NavigationMenuItem>
+			  <Link href="/players" legacyBehavior passHref>
+			  <NavigationMenuLink className={navigationMenuTriggerStyle()}>players</NavigationMenuLink>
+			  </Link>
+			</NavigationMenuItem>
 		  </NavigationMenuList>
 		</NavigationMenu>
 	</header>
