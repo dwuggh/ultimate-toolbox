@@ -2,7 +2,7 @@
 import { Container, FederatedEventHandler, Graphics, Point } from "pixi.js";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-export enum PlayerColor {
+export enum ChessColor {
   RED = 0xFF0000,
   GREEN = 0x00FF00,
   BLUE = 0x0000FF,
@@ -10,21 +10,21 @@ export enum PlayerColor {
   PURPLE = 0xFF00FF,
   CYAN = 0x00FFFF
 }
-export class PlayerData {
-  color: PlayerColor;
+export class ChessData {
+  color: ChessColor;
   id: number;
   initialPosition: Point = new Point(0, 0);
 
-  constructor(color: PlayerColor, id: number, initialPosition?: Point) {
+  constructor(color: ChessColor, id: number, initialPosition?: Point) {
     this.color = color;
     this.id = id;
 	this.initialPosition = initialPosition || new Point(0, 0);
   }
 }
 
-export type PlayerMap = Map<PlayerColor, PlayerData[]>
+export type ChessMap = Map<ChessColor, ChessData[]>
 
-export interface PlayerProps extends PlayerData {
+export interface PlayerProps extends ChessData {
 	radius: number;
 	onPointerDown?: FederatedEventHandler,
 	onPointerMove?: FederatedEventHandler,

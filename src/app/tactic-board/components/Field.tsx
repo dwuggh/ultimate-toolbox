@@ -3,7 +3,7 @@
 import { Container, FederatedPointerEvent, Graphics, Sprite, Text, } from 'pixi.js';
 import { extend } from '@pixi/react';
 import React, { useRef, useCallback } from 'react';
-import Player, { PlayerData, PlayerMap } from './Player';
+import Player, { ChessData, ChessMap } from './Player';
 import Frisbee, { FrisbeeData } from './Frisbee';
 import { Curve, Line } from './Strokes';
 import SelectState from '@/lib/select';
@@ -15,7 +15,7 @@ import { MyContainer } from '@/lib/container';
 extend({ Container, Graphics, Text, Sprite, MyContainer });
 
 interface FieldProps {
-  players: PlayerMap,
+  players: ChessMap,
   frisbees: FrisbeeData[],
   brush: Brush,
   strokeHook: StrokeHookResult,

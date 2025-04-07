@@ -3,9 +3,9 @@
 import { useRef, useState } from "react"
 import { saveAs } from 'file-saver';
 import { Input } from '@/components/ui/input';
-import { PlayerColor, PlayerData, PlayerMap } from "./Player";
+import { ChessColor, ChessData, ChessMap } from "./Player";
 import { FrisbeeData } from "./Frisbee";
-import PlayerButton from "./PlayerButton";
+import AddChessButton from "./AddChessButton";
 import FrisbeeButton from "./FrisbeeButton";
 import Field from "./Field";
 import { Application, useApplication } from "@pixi/react";
@@ -18,7 +18,7 @@ import useStroke from "@/hooks/useStroke";
 import SelectState from "@/lib/select";
 
 interface TacticBoardData {
-	players: Map<PlayerColor, PlayerData[]>,
+	players: Map<ChessColor, ChessData[]>,
 	frisbees: FrisbeeData[],
 	strokes: StrokeData[],
 }
@@ -26,7 +26,7 @@ interface TacticBoardData {
 
 
 export default function Section() {
-	const [players, setPlayers] = useState<PlayerMap>(new Map());
+	const [chesses, setChesses] = useState<ChessMap>(new Map());
 	const [saveName, setSaveName] = useState<string>('');
 	const [isImporting, setIsImporting] = useState(false);
 	const [frisbees, setFrisbees] = useState<FrisbeeData[]>([]);
@@ -34,13 +34,13 @@ export default function Section() {
     const strokeHook = useStroke(brush);
   	const selectState = useRef<SelectState>(new SelectState());
 	
-	const addPlayer = (newPlayer: PlayerData) => {
-		setPlayers(prev => {
-			const color = newPlayer.color;
+	const addChess = (newChess: ChessData) => {
+		setChesses(prev => {
+			const color = newChess.color;
 			const players = prev.get(color) || [];
-			newPlayer.id = players.map(p => p.id).reduce((a, b) => Math.max(a, b), 0) + 1;
+			newChess.id = players.map(p => p.id).reduce((a, b) => Math.max(a, b), 0) + 1;
 			const newPlayers = new Map(prev);
-			newPlayers.set(color, [...players, newPlayer]);
+			newPlayers.set(color, [...players, newChess]);
 			return newPlayers;
 		});
 	}
@@ -52,7 +52,7 @@ export default function Section() {
 
 	const exportBoard = () => {
 		const data = {
-			players: Array.from(players.entries()),
+			players: Array.from(chesses.entries()),
 			frisbees,
 			strokes: strokeHook.lines,
 			name: saveName || 'tactic-board-' + new Date().toISOString().slice(0, 10)
@@ -70,7 +70,7 @@ export default function Section() {
 		reader.onload = (e) => {
 			try {
 				const imported = JSON.parse(e.target?.result as string);
-				if (imported.players) setPlayers(new Map(imported.players));
+				if (imported.players) setChesses(new Map(imported.players));
 				if (imported.frisbees) setFrisbees(imported.frisbees);
 				if (imported.strokes) strokeHook.setLines(imported.strokes);
 				if (imported.name) setSaveName(imported.name);
@@ -94,7 +94,7 @@ export default function Section() {
 		switch (objectType) {
 			case 'player': {
 				const color = (target as any).color;
-				setPlayers(prev => {
+				setChesses(prev => {
 					const players = prev.get(color) || [];
 					const newPlayers = new Map(prev);
 					newPlayers.set(color, players.filter(p => p.id !== objectId));
@@ -132,7 +132,7 @@ export default function Section() {
 					<Button 
 						variant="outline" 
 						onClick={exportBoard}
-						disabled={players.size === 0 && frisbees.length === 0 && strokeHook.lines.length === 0 && strokeHook.curves.length === 0}
+						disabled={chesses.size === 0 && frisbees.length === 0 && strokeHook.lines.length === 0 && strokeHook.curves.length === 0}
 					>
 						{isImporting ? 'Importing...' : 'Export Board'}
 					</Button>
@@ -158,10 +158,10 @@ export default function Section() {
 				resolution={2}
 				background="#ffffff"
 			>
-				<Field players={players} frisbees={frisbees} brush={brush} strokeHook={strokeHook} selectState={selectState}></Field>
+				<Field players={chesses} frisbees={frisbees} brush={brush} strokeHook={strokeHook} selectState={selectState}></Field>
 			</Application>
     		<div className="flex justify-between w-180 items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg p-1.5 shadow-sm">
-			<PlayerButton addPlayer={addPlayer} />
+			<AddChessButton addChess={addChess} />
 			<FrisbeeButton addFrisbee={addFrisbee} />
 			{/* <Toggle variant='outline' onPressedChange={(pressed: boolean) => drawModeRef.current = pressed ? 1 : 0}><Pen /></Toggle> */}
 			<BrushSelector brush={brush} onBrushChange={setBrush}/>
