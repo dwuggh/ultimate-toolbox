@@ -3,16 +3,16 @@
 import { Container, FederatedPointerEvent, Graphics, Sprite, Text, } from 'pixi.js';
 import { extend } from '@pixi/react';
 import React, { useRef, useCallback } from 'react';
-import Player, { ChessData, ChessMap } from './Player';
-import Frisbee, { FrisbeeData } from './Frisbee';
+import Player from './Player';
+import Frisbee from './Frisbee';
 import { Curve, Line } from './Strokes';
 import SelectState from '@/lib/select';
-import useStroke, { StrokeHookResult } from '@/hooks/useStroke';
+import { StrokeHookResult } from '@/hooks/useStroke';
 import useApp from '@/hooks/useApp';
 import { Brush, BrushType } from '@/lib/brush';
-import { MyContainer } from '@/lib/container';
+import { ChessMap, FrisbeeData } from '@/store/tactic-board';
 
-extend({ Container, Graphics, Text, Sprite, MyContainer });
+extend({ Container, Graphics, Text, Sprite });
 
 interface FieldProps {
   chesses: ChessMap,
@@ -106,7 +106,7 @@ const Field = ({chesses, frisbees, brush, strokeHook, selectState }: FieldProps)
       </pixiGraphics>
       {
         [...chesses.values()].flat().map((player) => {
-          return <Player key={player.id} id={player.id} color={player.color} initialPosition={player.initialPosition} radius={2} />
+          return <Player id={player.id} color={player.color} initialPosition={player.initialPosition} radius={2} />
         })
       }
       {frisbees.map((frisbee) => (

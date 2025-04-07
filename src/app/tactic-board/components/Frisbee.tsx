@@ -1,16 +1,8 @@
 'use client'
+import { FrisbeeData } from "@/store/tactic-board";
 import { Container, FederatedEventHandler, Graphics, Point } from "pixi.js";
 import { memo, useCallback, useEffect, useRef } from "react";
 
-export class FrisbeeData {
-  id: number;
-  initialPosition: Point = new Point(0, 0);
-
-  constructor(id: number, initialPosition?: Point) {
-    this.id = id;
-    this.initialPosition = initialPosition || new Point(0, 0);
-  }
-}
 
 export interface FrisbeeProps extends FrisbeeData {
   radius: number;

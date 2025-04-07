@@ -6,8 +6,6 @@ export default class SelectState {
   isDragging = false;
   dragOffset = new Point(0, 0);
 
-  filter: DropShadowFilter = new DropShadowFilter({resolution: 4});
-
   select(target: Container, drag: boolean, eventPos?: Point) {
     // unselect original target
     this.unselect();
@@ -43,7 +41,7 @@ export default class SelectState {
 
     if (this.target) {
       if (add) {
-      this.target.filters = [this.filter];
+      this.target.filters = [new DropShadowFilter({resolution: 4})];
       } else {
       this.target.filters = [];
       }

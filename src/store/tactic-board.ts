@@ -1,9 +1,39 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { ChessColor, ChessData, ChessMap } from '@/app/tactic-board/components/Player'
-import { FrisbeeData } from '@/app/tactic-board/components/Frisbee'
-import { StrokeData } from '@/lib/strokes'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import { Point, StrokeData } from '@/lib/strokes'
 import { Brush } from '@/lib/brush'
+
+export class FrisbeeData {
+  id: number;
+  initialPosition: Point = new Point(0, 0);
+
+  constructor(id: number, initialPosition?: Point) {
+    this.id = id;
+    this.initialPosition = initialPosition || new Point(0, 0);
+  }
+}
+
+export enum ChessColor {
+  RED = 0xFF0000,
+  GREEN = 0x00FF00,
+  BLUE = 0x0000FF,
+  YELLOW = 0xFFFF00,
+  PURPLE = 0xFF00FF,
+  CYAN = 0x00FFFF
+}
+export class ChessData {
+  color: ChessColor;
+  id: number;
+  initialPosition: Point = new Point(0, 0);
+
+  constructor(color: ChessColor, id: number, initialPosition?: Point) {
+    this.color = color;
+    this.id = id;
+	this.initialPosition = initialPosition || new Point(0, 0);
+  }
+}
+
+export type ChessMap = Map<ChessColor, ChessData[]>
 
 interface TacticBoardState {
   chesses: ChessMap
@@ -73,6 +103,7 @@ export const useTacticBoardStore = create<TacticBoardState>()(
       })),
       
       removeStroke: (id) => set((state) => ({
+        // TODO
         strokes: state.strokes.filter(s => s.id !== id)
       })),
       
@@ -98,11 +129,33 @@ export const useTacticBoardStore = create<TacticBoardState>()(
     {
       name: 'tactic-board-storage',
       partialize: (state) => ({ 
-        chesses: Array.from(state.chesses.entries()),
+        chesses: state.chesses,
         frisbees: state.frisbees,
         strokes: state.strokes,
         saveName: state.saveName
-      })
+      }),
+      storage: {
+        getItem: (key) => {
+          const str = localStorage.getItem(key) || '';
+          return {
+            state: {
+              ...JSON.parse(str).state,
+              chesses: new Map(JSON.parse(str).state.chesses)
+            }
+          }
+        },
+        setItem: (key, value) => {
+          console.log("setItem", key, value);
+          const str = JSON.stringify({
+            state: {
+              ...value.state,
+              chesses: Array.from(value.state.chesses.entries()),
+            },
+          })
+          localStorage.setItem(key, str)
+        },
+        removeItem: (key) => localStorage.removeItem(key)
+      }
     }
   )
 )
