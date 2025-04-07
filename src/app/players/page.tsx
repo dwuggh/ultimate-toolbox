@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 
 type Player = {
   id: string;
@@ -89,40 +90,49 @@ export default function PlayersPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 p-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-foreground mb-6">Player Management</h1>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">Player Management</CardTitle>
+            <CardDescription>
+              Manage your team roster and player information
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                onClick={exportPlayers}
+                disabled={players.length === 0}
+                className="flex-1 sm:flex-none"
+              >
+                Export Players
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="flex-1 sm:flex-none"
+              >
+                <label className="cursor-pointer">
+                  Import Players
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={importPlayers}
+                    className="hidden"
+                  />
+                </label>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Import/Export Controls */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <Button
-            variant="outline"
-            onClick={exportPlayers}
-            disabled={players.length === 0}
-            className="flex-1 sm:flex-none"
-          >
-            Export Players
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="flex-1 sm:flex-none"
-          >
-            <label className="cursor-pointer">
-              Import Players
-              <input
-                type="file"
-                accept=".json"
-                onChange={importPlayers}
-                className="hidden"
-              />
-            </label>
-          </Button>
-        </div>
-
-        {/* Add Player Form */}
-        <div className="bg-card text-card-foreground rounded-xl border shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Add New Player</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Player</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               placeholder="Full Name"
               value={newPlayer.name}
@@ -160,35 +170,37 @@ export default function PlayersPage() {
               onChange={(e) => setNewPlayer({...newPlayer, position: e.target.value})}
             />
           </div>
-          <Button
-            className="mt-4 w-full sm:w-auto"
-            onClick={addPlayer}
-            disabled={!newPlayer.name.trim()}
-          >
-            Add Player
-          </Button>
-        </div>
+          </CardContent>
+          <CardFooter>
+            <Button 
+              className="w-full sm:w-auto" 
+              onClick={addPlayer}
+              disabled={!newPlayer.name.trim()}
+            >
+              Add Player
+            </Button>
+          </CardFooter>
+        </Card>
 
-        {/* Player Roster */}
-        <div className="bg-card text-card-foreground rounded-xl border shadow-sm p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Player Roster</h2>
-            <span className="text-muted-foreground text-sm">
-              {players.length} player{players.length !== 1 ? 's' : ''}
-            </span>
-          </div>
-
-          {players.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No players have been added yet
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Player Roster</CardTitle>
+              <CardDescription>
+                {players.length} player{players.length !== 1 ? 's' : ''}
+              </CardDescription>
             </div>
-          ) : (
-            <div className="space-y-2">
-              {players.map((player) => (
-                <div
-                  key={player.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
+          </CardHeader>
+          <CardContent>
+            {players.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No players have been added yet
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {players.map((player) => (
+                  <Card key={player.id} className="hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between p-4">
                   <div>
                     <div className="font-medium flex items-center gap-2">
                       <span className="inline-flex items-center justify-center size-6 bg-muted rounded-full text-xs font-mono">
@@ -209,11 +221,13 @@ export default function PlayersPage() {
                   >
                     Remove
                   </Button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
