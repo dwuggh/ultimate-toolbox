@@ -12,9 +12,9 @@ export default function AddChessButton() {
   const [color, setColor] = useState<ChessColor>(ChessColor.RED);
 
   const onClick = useCallback(() => {
-    const newPlayer = new ChessData(color, 0, new Point(20, 20));
-    addChess(newPlayer);
-  }, [color]);
+    const newPlayer = new ChessData(color, 0, new Point(20, 20))
+    addChess(newPlayer)
+  }, [color, addChess])
 
   return (
     <div className="flex gap-2">

@@ -1,21 +1,18 @@
-import { useCallback, useState } from "react";
-import { Point } from "pixi.js";
-import { Button } from "@/components/ui/button";
-import { FrisbeeData } from "./Frisbee";
-import { LuCircle } from "react-icons/lu";
+'use client'
+import { useCallback } from "react"
+import { Point } from "pixi.js"
+import { Button } from "@/components/ui/button"
+import { FrisbeeData } from "./Frisbee"
+import { LuCircle } from "react-icons/lu"
+import { useTacticBoardStore } from '@/store/tactic-board'
 
-interface Props {
-  addFrisbee: (newFrisbee: FrisbeeData) => void
-}
-
-export default function FrisbeeButton({addFrisbee}: Props) {
-  const [nextId, setNextId] = useState(0);
+export default function FrisbeeButton() {
+  const addFrisbee = useTacticBoardStore(state => state.addFrisbee)
   
   const onClick = useCallback(() => {
-    const newFrisbee = new FrisbeeData(nextId, new Point(20, 20));
-    addFrisbee(newFrisbee);
-    setNextId(prevId => prevId + 1);
-  }, [addFrisbee, nextId]);
+    const newFrisbee = new FrisbeeData(Date.now(), new Point(20, 20))
+    addFrisbee(newFrisbee)
+  }, [addFrisbee])
 
   return (
     <Button onClick={onClick} variant='ghost'>
