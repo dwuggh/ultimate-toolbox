@@ -1,7 +1,7 @@
-import Section from "./components/section";
+import TacticBoard from "./components/TacticBoard";
 
-export default function TacticBoard() {
+export default function TacticBoardPage() {
   return (
-    <Section />
+    <TacticBoard />
   );
 }

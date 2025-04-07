@@ -25,7 +25,7 @@ interface TacticBoardData {
 
 
 
-export default function Section() {
+export default function TacticBoard() {
 	const [chesses, setChesses] = useState<ChessMap>(new Map());
 	const [saveName, setSaveName] = useState<string>('');
 	const [isImporting, setIsImporting] = useState(false);

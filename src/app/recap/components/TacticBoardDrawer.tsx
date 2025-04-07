@@ -14,7 +14,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import Section from "@/app/tactic-board/components/section"
+import TacticBoard from "@/app/tactic-board/components/TacticBoard"
 
 
 export function TacticBoardDrawer() {
@@ -26,7 +26,7 @@ export function TacticBoardDrawer() {
       <DrawerContent >
         <div className="mx-auto w-full max-w-sm">
           <div className="p-4 pb-0 h-full">
-			<Section />
+			<TacticBoard />
           </div>
         </div>
       </DrawerContent>
