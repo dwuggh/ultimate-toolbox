@@ -104,7 +104,6 @@ export const useTacticBoardStore = create<TacticBoardState>()(
       
       removeStroke: (id) => set((state) => ({
         // TODO
-        strokes: state.strokes.filter(s => s.id !== id)
       })),
       
       setStrokes: (strokes) => set({ strokes }),
