@@ -112,7 +112,7 @@ export function VideoOverlay({
           backgroundAlpha={0}
         >
           {annotations
-            .filter(a => Math.abs(a.time - currentTime) < 0.5)
+            .filter(a => a.videoUrl == videoRef.current?.src && Math.abs(a.time - currentTime) < 0.5)
             .map((annotation) => (
               <AnnotationMarker
                 key={annotation.id}
