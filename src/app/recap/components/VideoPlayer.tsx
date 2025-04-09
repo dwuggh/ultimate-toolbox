@@ -60,7 +60,15 @@ export default function VideoPlayer({
     }
   };
 
+  const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
+    setHasMounted(true);
+  }, [])
+
+  useEffect(() => {
+    console.log("videoRef.current", videoRef.current, playerRef.current);
+    if (!hasMounted || !videoRef.current) return;
+
     if (videoRef.current && !playerRef.current) {
       const player = playerRef.current = videojs(videoRef.current, {
         controls: true,
@@ -91,7 +99,7 @@ export default function VideoPlayer({
         }
       };
     }
-  }, []);
+  }, [hasMounted]);
 
   return (
     <Card>

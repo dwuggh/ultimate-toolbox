@@ -40,6 +40,7 @@ export const usePlayersStore = create<PlayersStore>()(
     }),
     {
       name: 'players-storage',
+      skipHydration: true,
     }
   )
 );

@@ -10,13 +10,13 @@ import SelectState from '@/lib/select';
 import { StrokeHookResult } from '@/hooks/useStroke';
 import useApp from '@/hooks/useApp';
 import { Brush, BrushType } from '@/lib/brush';
-import { ChessMap, FrisbeeData } from '@/store/tactic-board';
+import { ChessMap, FrisbeeData, Positioned, useTacticBoardStore } from '@/store/tactic-board';
 
 extend({ Container, Graphics, Text, Sprite });
 
 interface FieldProps {
   chesses: ChessMap,
-  frisbees: FrisbeeData[],
+  frisbees: Positioned<FrisbeeData>[],
   brush: Brush,
   strokeHook: StrokeHookResult,
   selectState: React.RefObject<SelectState>
@@ -59,16 +59,26 @@ const Field = ({chesses, frisbees, brush, strokeHook, selectState }: FieldProps)
     selectState.current.move(event.global);
   }
 
+  const tacticBoardStore = useTacticBoardStore();
+
   const onPointerUp = (event: FederatedPointerEvent) => {
     strokeHook.onPointerUp();
 
     if (selectState.current) {
+      if (selectState.current.target) {
+
+        const target = selectState.current.target;
+        const point = target.position;
+        const objectType = (target as any).objectType;
+        const objectId = (target as any).objectId;
+        tacticBoardStore.updatePosition(objectType, objectId, point, (target as any).color);
+      }
       selectState.current.unsetDrag();
     }
   }
 
   const onClick = (event: FederatedPointerEvent) => {
-    
+
     const court = courtRef.current;
     if (!court) return;
     const pos = court.toLocal(event.global);
@@ -106,16 +116,16 @@ const Field = ({chesses, frisbees, brush, strokeHook, selectState }: FieldProps)
       </pixiGraphics>
       {
         [...chesses.values()].flat().map((player) => {
-          return <Player id={player.id} color={player.color} initialPosition={player.initialPosition} radius={2} />
+          return <Player data={player} radius={2} />
         })
       }
       {frisbees.map((frisbee) => (
-        <Frisbee key={frisbee.id} id={frisbee.id} initialPosition={frisbee.initialPosition} radius={1} />
+        <Frisbee key={frisbee.object.id} data={frisbee} radius={1} />
       ))}
       {strokeHook.lines.map((line, i) => (
         <Line data={line} id={i} />
       ))}
-      {strokeHook.currentLine && <Line data={strokeHook.currentLine} id={-1}/>}
+      {strokeHook.currentLine && <Line data={strokeHook.currentLine} id={-1} />}
       {strokeHook.curves.map((curve, i) => (
         <Curve data={curve} id={i} />
       ))}

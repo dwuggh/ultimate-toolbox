@@ -4,14 +4,14 @@ import { Point } from "pixi.js";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { LuPlus } from "react-icons/lu";
-import { ChessColor, ChessData, useTacticBoardStore } from '@/store/tactic-board';
+import { ChessColor, ChessData, Positioned, useTacticBoardStore } from '@/store/tactic-board';
 
 export default function AddChessButton() {
   const addChess = useTacticBoardStore(state => state.addChess);
   const [color, setColor] = useState<ChessColor>(ChessColor.RED);
 
   const onClick = useCallback(() => {
-    const newPlayer = new ChessData(color, 0, new Point(20, 20))
+    const newPlayer = new Positioned(new ChessData(color, 0), new Point(20, 20))
     addChess(newPlayer)
   }, [color, addChess])
 

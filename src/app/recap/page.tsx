@@ -80,6 +80,7 @@ export default function VideoRecap() {
   const handleVideoChange = (url: string) => {
     setSelectedVideo(url);
     if (playerRef.current) {
+      // console.log(url, playerRef.current);
       playerRef.current.src({ type: 'video/mp4', src: url });
       playerRef.current.play();
     }

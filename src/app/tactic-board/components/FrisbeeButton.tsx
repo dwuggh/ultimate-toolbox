@@ -3,13 +3,13 @@ import { useCallback } from "react"
 import { Point } from "pixi.js"
 import { Button } from "@/components/ui/button"
 import { LuCircle } from "react-icons/lu"
-import { FrisbeeData, useTacticBoardStore } from '@/store/tactic-board'
+import { FrisbeeData, Positioned, useTacticBoardStore } from '@/store/tactic-board'
 
 export default function FrisbeeButton() {
   const addFrisbee = useTacticBoardStore(state => state.addFrisbee)
   
   const onClick = useCallback(() => {
-    const newFrisbee = new FrisbeeData(Date.now(), new Point(20, 20))
+    const newFrisbee = new Positioned(new FrisbeeData(Date.now()), new Point(20, 20))
     addFrisbee(newFrisbee)
   }, [addFrisbee])
 

@@ -26,6 +26,14 @@ export interface StrokeHookResult {
   clear: () => void;
 }
 
+interface UseStrokeProps {
+  brush: Brush;
+  lineState?: {
+	lines: StrokeData[];
+	setLines: React.Dispatch<React.SetStateAction<StrokeData[]>>;
+  } 
+}
+
 export default function useStroke(brush: Brush) {
 	const isDrawing = useRef(false);
 	const [lines, setLines] = useState<StrokeData[]>([]);
@@ -66,7 +74,6 @@ export default function useStroke(brush: Brush) {
 
 	const onClick = useCallback((pos: Point) => {
 		if (brush.type === BrushType.CURVE3) {
-			console.log("onClick", isDrawing.current, DrawingCurveRemains.current, pos); // ADDED LOGGING
 			if (!isDrawing.current && DrawingCurveRemains.current == 0) {
 				isDrawing.current = true;
 				DrawingCurveRemains.current = 3;
@@ -79,7 +86,6 @@ export default function useStroke(brush: Brush) {
 					isDrawing.current = false;
 					console.log("run")
 					setCurrentCurve((prev) => {
-						console.log("setCurrentCurve (0)", prev, point); // ADDED LOGGING
 						if (!prev) {
 							return prev;
 						}
@@ -89,7 +95,6 @@ export default function useStroke(brush: Brush) {
 					});
 				} else {
 					setCurrentCurve((prev) => {
-						console.log("setCurrentCurve (>0)", prev, point); // ADDED LOGGING
 						return prev?.addPoint(point) || null
 					});
 				}
